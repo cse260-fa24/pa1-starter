@@ -23,9 +23,9 @@ CC 		= gcc $(STDC)
 
 # include openblas library
 LIB_BLAS =  -lopenblas
-INCLUDES += -I/usr/include/openblas
+# INCLUDES += -I/usr/include/openblas
 # and ARM Performance Libarary
-ARMPL = -L/opt/arm/armpl_22.0.2_gcc-11.2/lib -larmpl
+ARMPL = -L/opt/arm/armpl_24.04.0_gcc/lib -larmpl
 
 LDLIBS += $(LIB_BLAS) $(ARMPL)
 
@@ -60,13 +60,16 @@ LDLIBS		+= -lm -pthread
 CFLAGS += "-g"
 CFLAGS += "-DOPENBLAS_SINGLETHREAD"
 CFLAGS += -march=armv8.4-a+sve
-CFLAGS += -msve-vector-bits=256
+# -for AWS c7g.medium
+# CFLAGS += -msve-vector-bits=256
+# -for Google Cloud C4A
+CFLAGS += -msve-vector-bits=128
 
 # If you want to change your optimization settings, do it here.
 ifeq ($(debug), 1)
 	MY_OPT = "-O0"
 else
-	MY_OPT = "-O4"
+	MY_OPT = "-O3"
 endif
 # MY_OPT += "-fPIC"
 # MY_OPT = "-O3"
