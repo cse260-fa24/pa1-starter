@@ -161,8 +161,8 @@ void bl_macro_kernel(
       for ( j = 0; j < n; j += DGEMM_NR ) {                    // 1-th loop around micro-kernel
 	( *bl_micro_kernel ) (
 			      k,
-			      min(m-i, DGEMM_MR),
-			      min(n-j, DGEMM_NR),
+			      myMin(m-i, DGEMM_MR),
+			      myMin(n-j, DGEMM_NR),
 			      &packA[i * ldc],          // assumes sq matrix, otherwise use lda
 			      &packB[j],                // 
 
@@ -202,9 +202,9 @@ void bl_dgemm(
   packB  = bl_malloc_aligned( DGEMM_KC, ( DGEMM_NC/DGEMM_NR + 1 )* DGEMM_NR, sizeof(double) );
 #endif
   for ( ic = 0; ic < m; ic += DGEMM_MC ) {              // 5-th loop around micro-kernel
-      ib = min( m - ic, DGEMM_MC );
+      ib = myMin( m - ic, DGEMM_MC );
       for ( pc = 0; pc < k; pc += DGEMM_KC ) {          // 4-th loop around micro-kernel
-	pb = min( k - pc, DGEMM_KC );
+	pb = myMin( k - pc, DGEMM_KC );
 	
 
 #ifdef NOPACK
@@ -213,7 +213,7 @@ void bl_dgemm(
 	int    i, j;
 	for ( i = 0; i < ib; i += DGEMM_MR ) {
 	  packA_mcxkc_d(
-			min( ib - i, DGEMM_MR ), /* m */
+			myMin( ib - i, DGEMM_MR ), /* m */
 			pb,                      /* k */
 			&XA[ pc + lda*(ic + i)], /* XA - start of micropanel in A */
 			k,                       /* ldXA */
@@ -222,14 +222,14 @@ void bl_dgemm(
 	}
 #endif
 	for ( jc = 0; jc < n; jc += DGEMM_NC ) {        // 3-rd loop around micro-kernel
-	  jb = min( m - jc, DGEMM_NC );
+	  jb = myMin( m - jc, DGEMM_NC );
 
 #ifdef NOPACK
 	  packB = &XB[ldb * pc + jc ];
 #else
 	  for ( j = 0; j < jb; j += DGEMM_NR ) {
 	    packB_kcxnc_d(
-			  min( jb - j, DGEMM_NR ) /* n */,
+			  myMin( jb - j, DGEMM_NR ) /* n */,
 			  pb                      /* k */,
 			  &XB[ ldb * pc + jc + j]     /* XB - starting row and column for this panel */,
 			  n, // should be ldXB instead /* ldXB */

@@ -93,7 +93,7 @@ extern "C" {
 
 #include "bl_config.h"
 
-#define min( i, j ) ( (i)<(j) ? (i): (j) )
+#define myMin( i, j ) ( (i)<(j) ? (i): (j) )
 
 #define A( i, j )     A[ (j)*lda + (i) ]
 #define B( i, j )     B[ (j)*ldb + (i) ]
