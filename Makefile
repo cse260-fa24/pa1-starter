@@ -25,7 +25,7 @@ CC 		= gcc $(STDC)
 LIB_BLAS =  -lopenblas
 # INCLUDES += -I/usr/include/openblas
 # and ARM Performance Libarary
-ARMPL = -L/opt/arm/armpl_24.04.0_gcc/lib -larmpl
+ARMPL = -L/opt/arm/armpl_24.04_gcc/lib -larmpl
 
 LDLIBS += $(LIB_BLAS) $(ARMPL)
 
